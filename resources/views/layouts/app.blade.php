@@ -49,6 +49,13 @@
                                 </li>
                             @endif
                         @else
+
+                            @can('browse_admin')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin">Admin Panel</a>
+                                </li>
+                            @endcan
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -73,7 +80,7 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
+            @include('partials.sidebar')
         </main>
     </div>
 </body>

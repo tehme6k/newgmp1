@@ -7,7 +7,7 @@ use App\User;
 use App\Box;
 
 
-class ReopenedBox extends Model
+class ReopenedBoxes extends Model
 {
     protected $guarded = [];
 
