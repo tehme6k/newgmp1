@@ -36,9 +36,19 @@
                         @foreach($products as $product)
                             <tr>
                                 <td>
-                                    <a href="{{route('products.show', $product->id)}}" class="btn btn-link btn-md">
-                                        {{$product->name}}
-                                    </a>
+                                    @if(auth()->user()->email == 'admin@admin.com')
+                                        <a href="{{route('products.show', $product->id)}}" class="btn btn-link btn-md">
+                                            {{$product->name}}
+                                        </a>
+                                    @else
+                                        @can('read', $product)
+                                            <a href="{{route('products.show', $product->id)}}" class="btn btn-link btn-md">
+                                                {{$product->name}}
+                                            </a>
+                                        @else
+                                            {{$product->name}}
+                                        @endcan
+                                    @endif
                                 </td>
 
                                 <td>

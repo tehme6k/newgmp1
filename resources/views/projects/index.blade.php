@@ -40,9 +40,19 @@
                         @foreach($projects as $project)
                             <tr>
                                 <td>
-                                    <a href="{{ route('projects.show', $project->id) }}" class="btn btn-link btn-md">
-                                        {{$project->name}}
-                                    </a>
+                                    @if(auth()->user()->email == 'admin@admin.com')
+                                        <a href="{{ route('projects.show', $project->id) }}" class="btn btn-link btn-md">
+                                            {{$project->name}}
+                                        </a>
+                                    @else
+                                        @can('read', $project)
+                                            <a href="{{ route('projects.show', $project->id) }}" class="btn btn-link btn-md">
+                                                {{$project->name}}
+                                            </a>
+                                        @else
+                                            {{$project->name}}
+                                        @endcan
+                                    @endif
                                 </td>
 
                                 <td>

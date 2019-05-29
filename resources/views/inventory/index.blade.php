@@ -6,14 +6,15 @@
 
         <div class="card card-default mb-2">
             <div class="card-header">
-                <div class="d-flex justify-content-end">
-                    <div>
-                        <button type="button" class="btn btn-success mb-2 mr-3" onclick="handleAdd()">Add</button>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-danger mb-2" onclick="handleAdd()">Remove</button>
-                    </div>
-                </div>
+                Full Inventory List
+{{--                <div class="d-flex justify-content-end">--}}
+{{--                    <div>--}}
+{{--                        <button type="button" class="btn btn-success mb-2 mr-3" onclick="handleAdd()">Add</button>--}}
+{{--                    </div>--}}
+{{--                    <div>--}}
+{{--                        <button type="button" class="btn btn-danger mb-2" onclick="handleAdd()">Remove</button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
             </div>
             <div class="card-body">
                 <div class="d-flex justify-content-between">
@@ -30,9 +31,7 @@
 
 
         <div class="card card-default">
-            <div class="card-header">
-                Full Inventory List
-            </div>
+
             <div class="card-body">
                 @if($products->count() > 0)
                     <table class="table">

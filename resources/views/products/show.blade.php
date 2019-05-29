@@ -1,3 +1,4 @@
+<?php $inventory = App\Inventory::first(); ?>
 @extends('layouts.app')
 
 @section('content')
@@ -19,11 +20,19 @@
                     <h4>Total: 0</h4>
                 @endif
                 <p>
-                <div>
-                    <button type="button" class="btn btn-info mb-2 mr-3" onclick="handleReceive()">Recieve In</button>
-
-                    <button type="button" class="btn btn-success mb-2 ml-3" onclick="handleAdjustment()">Make Adjustment</button>
-                </div>
+                    @if(auth()->user()->email == 'admin@admin.com')
+                        <div>
+                            <button type="button" class="btn btn-info mb-2 mr-3" onclick="handleReceive()">Recieve In</button>
+                            <button type="button" class="btn btn-success mb-2 ml-3" onclick="handleAdjustment()">Make Adjustment</button>
+                        </div>
+                    @else
+                        @can('edit', $inventory)
+                            <div>
+                                <button type="button" class="btn btn-info mb-2 mr-3" onclick="handleReceive()">Recieve In</button>
+                                <button type="button" class="btn btn-success mb-2 ml-3" onclick="handleAdjustment()">Make Adjustment</button>
+                            </div>
+                        @endcan
+                    @endif
                 </p>
             </div>
         </section>
@@ -41,9 +50,13 @@
             @foreach($inventories as $inventory)
                 <tr>
                     <td>
-                        <a href="{{ route('inventories.show', $inventory->id) }}" class="btn btn-link">
+                        @can('read', $inventory)
+                            <a href="{{ route('inventories.show', $inventory->id) }}" class="btn btn-link">
+                                {{number_format($inventory->amount, 2)}} {{$unit}}
+                            </a>
+                        @else
                             {{number_format($inventory->amount, 2)}} {{$unit}}
-                        </a>
+                        @endcan
                     </td>
 
                     <td>

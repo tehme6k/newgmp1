@@ -8,9 +8,9 @@
                 <div class="container">
                     <h1 class="jumbotron-heading">
                         <div class="d-flex justify-content-start">
-                            <div>
-                                <a href="{{ route('products.show', $inventory->product->id) }}" class="btn btn-link">Back</a>
-                            </div>
+{{--                            <div>--}}
+{{--                                <a href="{{ route('products.show', $inventory->product->id) }}" class="btn btn-link">Back</a>--}}
+{{--                            </div>--}}
                         </div>
                         {{$inventory->product->name}}
                     </h1>
@@ -22,7 +22,7 @@
                     <h3>Created <strong>{{ $inventory->created_at->diffForHumans()}}</strong></h3>
                     <h3>By <strong>{{ $inventory->createdBy->name }}</strong></h3>
                     <p>
-                        @can('update inventory status')
+                        @if(auth()->user()->email == 'admin@admin.com')
                             @if($inventory->status != 'approved')
                                 <button type="button" class="btn btn-success mb-2 " onclick="handleApprove()">Approve</button>
                             @endif
@@ -30,7 +30,17 @@
                             @if($inventory->status != 'rejected')
                                 <button type="button" class="btn btn-danger mb-2 ml-2" onclick="handleReject()">Reject</button>
                             @endif
-                        @endcan
+                        @else
+                            @can('status', $inventory)
+                                @if($inventory->status != 'approved')
+                                    <button type="button" class="btn btn-success mb-2 " onclick="handleApprove()">Approve</button>
+                                @endif
+
+                                @if($inventory->status != 'rejected')
+                                    <button type="button" class="btn btn-danger mb-2 ml-2" onclick="handleReject()">Reject</button>
+                                @endif
+                            @endcan
+                        @endif
 
                         @can('upload inventory file')
                             <button class="btn btn-info mb-2 ml-2" onclick="handleNewFile()">Add File</button>

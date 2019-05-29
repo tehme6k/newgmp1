@@ -1,3 +1,8 @@
+<?php
+
+$box = App\Box::first();
+
+?>
 @extends('layouts.app')
 
 @section('content')
@@ -6,15 +11,21 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between">
                     <div>
-                        <a href="{{ route('boxes.index') }}" class="btn btn-primary mb-2">
-                            View Open Boxes
-                        </a>
+                        Closed Retention Boxes
                     </div>
 
                     <div>
-                        <button type="button" class="btn btn-success mb-2" onclick="handleAdd()">
-                            Add Box
-                        </button>
+                        @if(auth()->user()->email == 'admin@admin.com' || auth()->user()->email == 'innovativetim06@gmail.com')
+                            <button type="button" class="btn btn-success mb-2" onclick="handleAdd()">
+                                Add Box
+                            </button>
+                        @else
+                            @can('add', $box)
+                                <button type="button" class="btn btn-success mb-2" onclick="handleAdd()">
+                                    Add Box
+                                </button>
+                            @endcan
+                        @endif
                     </div>
                 </div>
             </div>
@@ -39,9 +50,7 @@
 
 
             <div class="card card-default">
-                <div class="card-header">
-                    Closed Retention Boxes
-                </div>
+
 
                 <div class="card-body">
                     @if($boxes->count() > 0)

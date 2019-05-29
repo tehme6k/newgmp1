@@ -9,8 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +17,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('css')
 </head>
 <body>
     <div id="app">
@@ -33,7 +33,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @auth
+                            @include('partials.top-menu')
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -50,18 +52,20 @@
                             @endif
                         @else
 
-                            @can('browse_admin')
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/admin">Admin Panel</a>
-                                </li>
-                            @endcan
+
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
+
+
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @can('browse_admin')
+                                        <a class="dropdown-item" href="/admin">Admin Panel</a>
+                                    @endcan
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -80,8 +84,19 @@
         </nav>
 
         <main class="py-4">
-            @include('partials.sidebar')
+            @yield('content')
+{{--            @include('partials.sidebar')--}}
         </main>
     </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" ></script>
+    <script>
+        function handleAdd() {
+            console.log('Opening Modal from layouts.app.blade.php file scripts section')
+
+            $('#addModal').modal('show')
+        }
+    </script>
+    @yield('scripts')
 </body>
 </html>

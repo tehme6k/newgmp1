@@ -16,7 +16,9 @@ Route::get('/new', 'HomeController@new')->name('new');
 
 Auth::routes();
 
-
+Route::get('pages', function (){
+    return view('pages');
+});
 
 Route::resource('/vendorcoas', 'VendorcoasController');
 Route::resource('/bprs', 'BprController');

@@ -29,32 +29,32 @@
                 @endif
             </h2>
             <p class="lead text-muted">
-            <h3>Started By <strong> {{ $box->openedBy->name }}</strong> {{ $box->created_at->diffForHumans() }}</h3>
+                <h3>Started By <strong> {{ $box->openedBy->name }}</strong> {{ $box->created_at->diffForHumans() }}</h3>
             @if($box->closedBy != null)
                 <h3>Closed by <stong>{{$box->closedBy->name}}</stong> {{ $box->closed_at->diffForHumans() }}</h3>
             @endif
             <p>
-            @if(!$box->closed_by)
-            @can('edit_boxes')
-                    <div>
-                        @if($retentions->count() > 0)
-                            <button type="button" class="btn btn-outline-danger mr-5" onclick="handleClose()">
-                                Close this box
-                            </button>
-                        @endif
+                @can('edit', $box)
+                    @if(!$box->closed_by)
+                        <div>
+                            @if($retentions->count() > 0)
+                                <button type="button" class="btn btn-outline-danger mr-5" onclick="handleClose()">
+                                    Close this box
+                                </button>
+                            @endif
 
-                        <button type="button" class="btn btn-primary ml-5" onclick="handleAdd()">
-                            Add Bottle
-                        </button>
-                    </div>
-                @else
-                    <div>
-                        <button type="button" class="btn btn-outline-danger mr-5" onclick="handleReopen()">
-                            Reopen Box
-                        </button>
-                    </div>
-            @endcan
-                @endif
+                            <button type="button" class="btn btn-primary ml-5" onclick="handleAdd()">
+                                Add Bottle
+                            </button>
+                        </div>
+                    @else
+                        <div>
+                            <button type="button" class="btn btn-outline-danger mr-5" onclick="handleReopen()">
+                                Reopen Box
+                            </button>
+                        </div>
+                    @endif
+                @endcan
             </p>
         </div>
     </section>
@@ -78,16 +78,31 @@
                 </td>
 
                 <td>
-                    {{$retention->project->name}} -
-                    {{$retention->project->flavor}}
+                    @if(!empty($retention->project))
+                        {{$retention->project->name}} -
+                        {{$retention->project->flavor}}
+                    @else
+                        <font color="red">Error - No Project Found</font>
+                    @endif
+
                 </td>
 
                 <td>
-                    {{\Carbon\Carbon::parse($retention->production_date)->format('d M Y')}}
+                    @if(!empty($retention->production_date))
+                        {{\Carbon\Carbon::parse($retention->production_date)->format('d M Y')}}
+                    @else
+                        <font color="red">Error</font>
+                    @endif
+
                 </td>
 
                 <td>
-                    {{\Carbon\Carbon::parse($retention->expiration_date)->format('d M Y')}}
+                    @if(!empty($retention->expiration_date))
+                        {{\Carbon\Carbon::parse($retention->expiration_date)->format('d M Y')}}
+                    @else
+                        <font color="red">Error</font>
+                    @endif
+
                 </td>
 
                 <td>
