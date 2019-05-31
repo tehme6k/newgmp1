@@ -20,6 +20,7 @@ Route::get('pages', function (){
     return view('pages');
 });
 
+Route::resource('/vendors', 'VendorsController');
 Route::resource('/vendorcoas', 'VendorcoasController');
 Route::resource('/bprs', 'BprController');
 Route::resource('/mprs', 'MprController');

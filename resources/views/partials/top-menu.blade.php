@@ -4,6 +4,7 @@ $box = App\Box::first();
 $inventory = App\Inventory::first();
 $project = App\Project::first();
 $product = App\Product::first();
+$vendor = App\Vendor::first();
 
 
 
@@ -11,6 +12,10 @@ $product = App\Product::first();
 @if(auth()->user()->email == 'admin@admin.com' || auth()->user()->email == 'innovativetim06@gmail.com')
 <li class="nav-item">
     <a class="nav-link" href="/home">Home</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('vendors.index') }}">Vendors</a>
 </li>
 
 <li class="nav-item">
@@ -49,10 +54,18 @@ $product = App\Product::first();
         </a>
     </div>
 </li>
+
 @else
+
     <li class="nav-item">
         <a class="nav-link" href="/home">Home</a>
     </li>
+
+    @can('browse', $vendor)
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('vendors.index') }}">Vendors</a>
+        </li>
+    @endcan
 
     @can('browse', $product)
         <li class="nav-item">

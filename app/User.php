@@ -38,4 +38,12 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function product(){
+        return $this->hasMany(Product::class, 'created_by');
+    }
+
+    public function vendor(){
+        return $this->hasMany(Vendor::class);
+    }
 }

@@ -30,5 +30,7 @@ class Product extends Model
         return $this->belongsToMany(Mpr::class)->with('amount');
     }
 
-
+    public function vendor(){
+        return $this->belongsToMany(Vendor::class);
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVendorsTable extends Migration
+class CreateProductVendorTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateVendorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vendors', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->bigInteger('country_id');
-            $table->bigInteger('user_id');
-            $table->timestamps();
+        Schema::create('product_vendor', function (Blueprint $table) {
+            $table->bigInteger('product_id');
+            $table->bigInteger('vendor_id');
         });
     }
 
@@ -29,6 +26,6 @@ class CreateVendorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors');
+        Schema::dropIfExists('product_vendor');
     }
 }

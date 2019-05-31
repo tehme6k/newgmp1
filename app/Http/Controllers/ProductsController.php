@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Category;
 use App\Http\Requests\CreateProductRequest;
 use App\Inventory;
@@ -17,17 +18,13 @@ class ProductsController extends Controller
 
     public function store(CreateProductRequest $request)
     {
-        $user = User::find(auth()->user()->id)->first();
 
-        $user->product->create([
+
+        Product::create([
             'name' => $request->name,
             'category_id' => $request->category_id,
+            'created_by' => auth()->user()->id
         ]);
-
-//        Product::create([
-//
-//            'created_by' => auth()->user()->id
-//        ]);
 
         session()->flash('success', 'Product Added');
 
