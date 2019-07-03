@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ApproveStatusRequest;
 use App\Http\Requests\RejectBatchRequest;
+use App\Project;
 use App\User;
 use App\Bpr;
 use App\BprProduct;
@@ -31,21 +32,22 @@ class BprController extends Controller
     public function store(Request $request)
     {
 
+
+
         $MprProducts = MprProduct::where('mpr_id', $request->mpr_id)->get();
 
-        if($request->run_count == null){
-            $run_count = 1;
-        }
-        else{
-            $run_count = $request->run_count + 1;
-        }
+        $run_count = $request->run_count + 1;
+
+        $pn = $request->project_id;
+
 
         $dt = Carbon::now();
         $dt = substr($dt->toDateString(), 2, 2);
-        $pn = $request->project_id;
+
         $count = str_pad($run_count, 3, "0", STR_PAD_LEFT);
 
         $lot = $pn.$dt.$count;
+
         $user = User::findOrFail(auth()->user()->id)->first();
 
         $bpr = $user->bpr()->create([
@@ -54,7 +56,14 @@ class BprController extends Controller
             'bottle_count' => $request->bottle_count * 1.05,
             'created_by' => auth()->user()->id,
             'project_id' => $request->project_id,
-            'run_count' => $run_count
+        ]);
+
+        $project = Project::findOrFail($request->project_id);
+
+
+
+        $project->update([
+            'batch_count' => $count
         ]);
 
         foreach($MprProducts as $mprProduct){
@@ -64,6 +73,12 @@ class BprController extends Controller
                 $amount = $request->bottle_count * 1.05;
             }
             $bpr->products()->attach($mprProduct->product_id, ['amount' => $amount, 'category_id' => $mprProduct->category_id]);
+
+            $product = Product::findOrFail($mprProduct->product_id)->first();
+
+            $product->update([
+                'total' => $product->total - $amount
+            ]);
         }
 
         session()->flash('success', 'Batch created');

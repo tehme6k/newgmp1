@@ -6,16 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Retention extends Model
 {
-    protected $fillable = [
-        'lot_number',
-        'production_date',
-        'expiration_date',
-        'expiration_length',
-        'box_id',
-        'user_id',
-        'project_id'
-
-    ];
+    protected $guarded = [];
 
     public function user()
     {

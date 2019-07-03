@@ -84,8 +84,10 @@
         </nav>
 
         <main class="py-4">
-            @yield('content')
-{{--            @include('partials.sidebar')--}}
+            <div class="container">
+                @yield('content')
+            </div>
+
         </main>
     </div>
     <!-- Scripts -->

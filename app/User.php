@@ -46,4 +46,8 @@ class User extends \TCG\Voyager\Models\User
     public function vendor(){
         return $this->hasMany(Vendor::class);
     }
+
+    public function bpr(){
+        return $this->belongsTo(Bpr::class);
+    }
 }

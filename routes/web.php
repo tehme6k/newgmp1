@@ -29,8 +29,9 @@ Route::resource('/products', 'ProductsController');
 Route::resource('/projects', 'ProjectsController');
 Route::resource('/boxes', 'BoxesController');
 Route::resource('/users', 'UsersController');
-Route::resource('inventories', 'InventoryController');
+Route::resource('inventories', 'InventoryController')->except('create');
 
+Route::get('/inventories/create/{product}', 'InventoryController@create')->name('inventories.create');
 Route::put('/inventories/newfile/{inventory}', 'InventoryController@newFile')->name('inventories.newFile');
 Route::put('bprs/{bpr}/approve', 'BprController@approve')->name('bprs.approve');
 Route::put('bprs/{bpr}/reject', 'BprController@reject')->name('bprs.reject');
@@ -40,7 +41,11 @@ Route::put('inventories/{inventory}/approve', 'InventoryController@approve')->na
 Route::put('inventories/{inventory}/reject', 'InventoryController@reject')->name('inventories.reject');
 Route::post('/inventories/powder', 'InventoryController@powderstore')->name('inventories.powder.store');
 Route::post('/inventories/nonpowder', 'InventoryController@nonpowderstore')->name('inventories.nonpowder.store');
-Route::post('/inventories/receivepowder', 'InventoryController@powderReceive')->name('inventories.powder.receive');
+Route::post('/inventories/recPowder', 'InventoryController@recPowder')->name('inv.rec.powder');
+Route::post('/inventories/recNonPowder', 'InventoryController@recNonPowder')->name('inv.rec.non.powder');
+
+Route::post('/inventories/receivepowder', 'InventoryController@rec')->name('inventories.powder.receive');
+
 Route::post('/inventories/receivenonpowder', 'InventoryController@nonpowderReceive')->name('inventories.nonpowder.receive');
 
 Route::get('/boxes/{box}/print', 'BoxesController@print')->name('box.print');
@@ -48,6 +53,11 @@ Route::get('/boxes/{box}/print', 'BoxesController@print')->name('box.print');
 
 Route::get('/retention/closed', 'RetentionController@closed')->name('ret.closed');
 Route::post('retention/add/{box}/', 'RetentionController@add')->name('retention.add');
+
+Route::get('inventory/{inventory}/lot/', 'LotController@show')->name('lot.show');
+Route::get('inventory/{inventory}/lot/create/', 'LotController@create')->name('lot.create');
+Route::post('inventory/lot/store/', 'LotController@store')->name('lot.store');
+
 
 
 

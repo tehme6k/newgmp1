@@ -7,24 +7,42 @@ use App\Category;
 use App\Http\Requests\CreateProductRequest;
 use App\Inventory;
 use App\Product;
+use App\Vendor;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
     public function index()
     {
-        return view('products.index')->with('categories', Category::all())->with('products', Product::all());
+
+        return view('products.index')
+            ->with('categories', Category::all())
+            ->with('products', Product::all())
+            ->with('vendors', Vendor::all());
     }
+
+    public function create()
+    {
+        return view('products.create')
+            ->with('categories', Category::all())
+            ->with('vendors', Vendor::all());
+    }
+
+
 
     public function store(CreateProductRequest $request)
     {
-
-
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
-            'category_id' => $request->category_id,
-            'created_by' => auth()->user()->id
+            'category_id' => $request->category,
+            'location' => $request->location,
+            'cost' => $request->cost,
+            'par' => $request->par,
+            'created_by' => auth()->user()->id,
+
         ]);
+
+        $product->vendors()->attach($request->vendors);
 
         session()->flash('success', 'Product Added');
 
@@ -37,16 +55,15 @@ class ProductsController extends Controller
 
         $total = Inventory::where('product_id', $product->id)->where('status', 'approved');
 
-        if($product->category->name == 'Powder'){
-            $unit = 'Kg';
-        }else{
-            $unit = 'each';
-        }
+//        if($product->category->name == 'Powder'){
+//            $unit = 'Kg';
+//        }else{
+//            $unit = 'each';
+//        }
 
         return view('products.show')
             ->with('product', $product)
             ->with('inventories', $inventories)
-            ->with('unit', $unit)
             ->with('total', $total);
     }
 

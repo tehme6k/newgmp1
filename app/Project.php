@@ -11,7 +11,8 @@ class Project extends Model
         'type_id',
         'created_by',
         'flavor',
-        'country_id'
+        'country_id',
+        'batch_count'
     ];
 
     public function type()

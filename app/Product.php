@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = [
-        'name',
-        'category_id',
-        'created_by'
-    ];
+    protected $guarded = [];
 
     public function category(){
         return $this->belongsTo(Category::class);
@@ -30,7 +26,7 @@ class Product extends Model
         return $this->belongsToMany(Mpr::class)->with('amount');
     }
 
-    public function vendor(){
+    public function vendors(){
         return $this->belongsToMany(Vendor::class);
     }
 }

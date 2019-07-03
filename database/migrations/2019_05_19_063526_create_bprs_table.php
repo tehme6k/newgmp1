@@ -18,14 +18,14 @@ class CreateBprsTable extends Migration
             $table->integer('mpr_id');
             $table->integer('project_id');
             $table->string('lot_number');
-            $table->integer('run_count')->default(1);
+//            $table->integer('run_count')->default(1);
             $table->integer('bottle_count')->unsigned();
             $table->integer('created_by');
             $table->integer('approved_by')->nullable();
             $table->string('status')->default('quarantine');
             $table->text('reason')->nullable();
 
-            $table->unique(['mpr_id', 'run_count']);
+//            $table->unique(['mpr_id', 'run_count']);
 
             $table->timestamps();
         });

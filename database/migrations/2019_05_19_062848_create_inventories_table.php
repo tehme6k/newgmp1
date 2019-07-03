@@ -16,14 +16,18 @@ class CreateInventoriesTable extends Migration
         Schema::create('inventories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('product_id');
-            $table->decimal('amount', 25,6);
-            $table->integer('created_by');
-            $table->integer('updated_by')->nullable();
+            $table->string('input_unit');
+            $table->decimal('input_amount', 25,6);
+            $table->decimal('use_amount', 25,6);
+            $table->bigInteger('vendor_id');
+            $table->string('vendor_lot');
+            $table->text('notes');
             $table->string('status')->default('quarantine');
-            $table->text('reason')->nullable();
-            $table->string('lot')->nullable();
             $table->timestamp('expiration_date')->nullable();
             $table->string('type');
+            $table->integer('created_by');
+            $table->integer('updated_by')->nullable();
+            $table->string('remove_on_reject')->default('no');
             $table->timestamps();
         });
     }

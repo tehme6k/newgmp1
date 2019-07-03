@@ -7,11 +7,18 @@
         <div class="card card-default mb-2">
             <div class="card-header">
                 <div class="d-flex justify-content-end">
-                    @can('add_projects')
+                    @if(auth()->user()->email == 'innovativetim06@gmail.com')
                         <button class="btn btn-success mb-2" type="button" onclick="handleAdd()">
                             Add Project
                         </button>
-                    @endcan
+                    @else
+                        @can('add_projects')
+                            <button class="btn btn-success mb-2" type="button" onclick="handleAdd()">
+                                Add Project
+                            </button>
+                        @endcan
+                    @endif
+
                 </div>
             </div>
             <div class="card-body">

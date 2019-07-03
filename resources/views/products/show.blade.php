@@ -15,22 +15,20 @@
                 <p class="lead text-muted">
                 <h3> By: <strong> {{ $product->user->name }}</strong></h3>
                 @if(isset($total))
-                    <h4>Total: {{number_format($total->sum('amount'), 2)}} {{$unit}}</h4>
+{{--                    <h4>Total: {{number_format($total->sum('amount'), 2)}} {{$unit}}</h4>--}}
                 @else
                     <h4>Total: 0</h4>
                 @endif
                 <p>
-                    @if(auth()->user()->email == 'admin@admin.com')
+                    @if(auth()->user()->email == 'innovativetim06@gmail.com')
                         <div>
-                            <button type="button" class="btn btn-info mb-2 mr-3" onclick="handleReceive()">Recieve In</button>
-                            <button type="button" class="btn btn-success mb-2 ml-3" onclick="handleAdjustment()">Make Adjustment</button>
+                            <a href="{{ route('inventories.create', $product->id) }}" class="btn btn-info mb-2 mr-3">Rec In</a>
                         </div>
                     @else
                         @can('edit', $inventory)
-                            <div>
-                                <button type="button" class="btn btn-info mb-2 mr-3" onclick="handleReceive()">Recieve In</button>
-                                <button type="button" class="btn btn-success mb-2 ml-3" onclick="handleAdjustment()">Make Adjustment</button>
-                            </div>
+                        <div>
+                            <a href="{{ route('inventories.create', $product->id) }}" class="btn btn-info mb-2 mr-3">Rec In</a>
+                        </div>
                         @endcan
                     @endif
                 </p>
@@ -40,7 +38,11 @@
         @if($inventories->count() > 0)
         <table class="table">
             <thead>
-            <th>Amount</th>
+            <th>Input Amount</th>
+{{--            <th>Input Unit</th>--}}
+            <th>Use Amount</th>
+{{--            <th>Use Unit</th>--}}
+            <th>Lot</th>
             <th>Added By</th>
             <th>Added On</th>
             <th>Status</th>
@@ -52,11 +54,27 @@
                     <td>
                         @can('read', $inventory)
                             <a href="{{ route('inventories.show', $inventory->id) }}" class="btn btn-link">
-                                {{number_format($inventory->amount, 2)}} {{$unit}}
+                                {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
                             </a>
                         @else
-                            {{number_format($inventory->amount, 2)}} {{$unit}}
+                            {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
                         @endcan
+                    </td>
+
+                    <td>
+                        {{number_format($inventory->use_amount, 2)}}
+                        @if($inventory->input_unit === 'ea')
+                            ea
+                        @else
+                            KG
+                        @endif
+                    </td>
+
+                    <td>
+                        <a href="{{ route('lot.show', $inventory->id) }}">
+                            {{ $inventory->vendor_lot }}
+                        </a>
+
                     </td>
 
                     <td>
@@ -87,124 +105,135 @@
         @yield('content')
     </div>
 
-    <form action="{{$unit == 'Kg' ?  route('inventories.powder.store')  :  route('inventories.nonpowder.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="modal fade" id="adjustmentModal" tabindex="-1" role="dialog" aria-labelledby="adjustmentModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="adjustmentModalLabel">{{$product->name}} : Add</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+{{--    <form action="{{$unit == 'Kg' ?  route('inventories.powder.store')  :  route('inventories.nonpowder.store') }}" method="POST" enctype="multipart/form-data">--}}
+{{--        @csrf--}}
+{{--        <div class="modal fade" id="adjustmentModal" tabindex="-1" role="dialog" aria-labelledby="adjustmentModalLabel" aria-hidden="true">--}}
+{{--            <div class="modal-dialog" role="document">--}}
+{{--                <div class="modal-content">--}}
+{{--                    <div class="modal-header">--}}
+{{--                        <h5 class="modal-title" id="adjustmentModalLabel">{{$product->name}} : Add</h5>--}}
+{{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                            <span aria-hidden="true">&times;</span>--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-body">--}}
 
-                        <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">
-                        <input type="hidden" name="category" value="{{$product->category->name}}">
+{{--                        <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">--}}
+{{--                        <input type="hidden" name="category" value="{{$product->category->name}}">--}}
 
-                        <div class="form-group">
-                            <label for="amount">Amount</label>
-                            <input type="number" name="amount" id="amount" class="form-control" step="any">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="amount">Amount</label>--}}
+{{--                            <input type="number" name="amount" id="amount" class="form-control" step="any">--}}
+{{--                        </div>--}}
 
-                        @if($unit == 'Kg')
-                            <div class="form-group">
-                                <label for="unit">Unit</label>
-                                <select name="unit" id="unit" class="form-control">
-                                    <option value="">---</option>
-                                    <option value="g">grams</option>
-                                    <option value="kg">kilograms</option>
-                                    <option value="lb">pounds</option>
-                                </select>
-                            </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="action">Method</label>
-                            <select name="action" id="action" class="form-control">
-                                <option value="">---</option>
-                                <option value="add">Add</option>
-                                @if($total->sum('amount') > 0)
-                                    <option value="remove">Remove</option>
-                                @endif
-                            </select>
-                        </div>
+{{--                        @if($unit == 'Kg')--}}
+{{--                            <div class="form-group">--}}
+{{--                                <label for="unit">Unit</label>--}}
+{{--                                <select name="unit" id="unit" class="form-control">--}}
+{{--                                    <option value="">---</option>--}}
+{{--                                    <option value="g">grams</option>--}}
+{{--                                    <option value="kg">kilograms</option>--}}
+{{--                                    <option value="lb">pounds</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label for="action">Method</label>--}}
+{{--                            <select name="action" id="action" class="form-control">--}}
+{{--                                <option value="">---</option>--}}
+{{--                                <option value="add">Add</option>--}}
+{{--                                @if($total->sum('amount') > 0)--}}
+{{--                                    <option value="remove">Remove</option>--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
 
-                        <div class="form-group">
-                            <label for="file">File</label>
-                            <input type="file" name="file" class="form-control">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="file">File</label>--}}
+{{--                            <input type="file" name="file" class="form-control">--}}
+{{--                        </div>--}}
 
-                        <div class="form-group">
-                            <label for="reason">Reason</label>
-                            <textarea name="reason" class="form-control"></textarea>
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="reason">Reason</label>--}}
+{{--                            <textarea name="reason" class="form-control"></textarea>--}}
+{{--                        </div>--}}
 
 
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--                    </div>--}}
+{{--                    <div class="modal-footer">--}}
+{{--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+{{--                        <button type="submit" class="btn btn-primary">Save</button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
 
-    </form>
+{{--    </form>--}}
 
-    <form action="{{$unit == 'Kg' ?  route('inventories.powder.receive')  :  route('inventories.nonpowder.receive') }}" method="POST">
-        @csrf
-        <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog" aria-labelledby="receiveModalModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="receiveModalModalLabel">{{$product->name}} : Receive from Shipment</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+{{--    <form action="{{$unit == 'Kg' ?  route('inventories.powder.receive')  :  route('inventories.nonpowder.receive') }}" method="POST">--}}
+{{--        @csrf--}}
+{{--        <div class="modal fade" id="receiveModal" tabindex="-1" role="dialog" aria-labelledby="receiveModalModalLabel" aria-hidden="true">--}}
+{{--            <div class="modal-dialog" role="document">--}}
+{{--                <div class="modal-content">--}}
+{{--                    <div class="modal-header">--}}
+{{--                        <h5 class="modal-title" id="receiveModalModalLabel">{{$product->name}} : Receive from Shipment</h5>--}}
+{{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                            <span aria-hidden="true">&times;</span>--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                    <div class="modal-body">--}}
 
-                        <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">
+{{--                        <input type="hidden" name="product_id" id="product_id" value="{{$product->id}}">--}}
 
-                        <div class="form-group">
-                            <label for="amount">Amount</label>
-                            <input type="number" name="amount" id="amount" class="form-control" step="any">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="amount">Amount</label>--}}
+{{--                            <input type="number" name="amount" id="amount" class="form-control" step="any">--}}
+{{--                        </div>--}}
 
-                        @if($unit == 'Kg')
-                            <div class="form-group">
-                                <label for="unit">Unit</label>
-                                <select name="unit" id="unit" class="form-control">
-                                    <option value="">---</option>
-                                    <option value="g">grams</option>
-                                    <option value="kg">kilograms</option>
-                                    <option value="lb">pounds</option>
-                                </select>
-                            </div>
-                        @endif
+{{--                        @if($unit == 'Kg')--}}
+{{--                            <div class="form-group">--}}
+{{--                                <label for="unit">Unit</label>--}}
+{{--                                <select name="unit" id="unit" class="form-control">--}}
+{{--                                    <option value="">---</option>--}}
+{{--                                    <option value="g">grams</option>--}}
+{{--                                    <option value="kg">kilograms</option>--}}
+{{--                                    <option value="lb">pounds</option>--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                        @endif--}}
 
-                        <div class="form-group">
-                                <label for="lot">Lot</label>
-                                <input type="text" name="lot" class="form-control">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                                <label for="lot">Lot</label>--}}
+{{--                                <input type="text" name="lot" class="form-control">--}}
+{{--                        </div>--}}
 
-                        <div class="form-group">
-                            <label for="production_date">Expiration date</label>
-                            <input type="text" name="expiration_date" id="expiration_date" class="form-control">
-                        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="vendor">Vendor</label>--}}
+{{--                            <select name="vendor" id="vendor" class="form-control">--}}
+{{--                                @foreach($product->vendors as $vendor)--}}
+{{--                                    <option value="{{ $vendor->id }}">--}}
+{{--                                        {{ $vendor->name }}--}}
+{{--                                    </option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--                        <div class="form-group">--}}
+{{--                            <label for="production_date">Expiration date</label>--}}
+{{--                            <input type="text" name="expiration_date" id="expiration_date" class="form-control">--}}
+{{--                        </div>--}}
 
-    </form>
+{{--                    </div>--}}
+{{--                    <div class="modal-footer">--}}
+{{--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+{{--                        <button type="submit" class="btn btn-primary">Save</button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+
+{{--    </form>--}}
 @endsection
 
 @section('css')

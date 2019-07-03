@@ -14,6 +14,7 @@ class CreateBprProductTable extends Migration
     public function up()
     {
         Schema::create('bpr_product', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->integer('bpr_id');
             $table->integer('product_id');
             $table->double('amount', 9, 2)->unsigned();

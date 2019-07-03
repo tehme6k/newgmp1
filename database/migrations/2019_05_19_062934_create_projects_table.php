@@ -21,8 +21,11 @@ class CreateProjectsTable extends Migration
             $table->string('flavor');
             $table->integer('country_id');
             $table->string('status')->default('quarantine'); //quarantine, approved, rejected, retired
+            $table->integer('batch_count')->default(0);
             $table->timestamps();
         });
+
+        DB::statement("ALTER TABLE projects AUTO_INCREMENT = 1000;");
     }
 
     /**

@@ -152,7 +152,7 @@
                                                 <input type="hidden" name="mpr_id" value="{{ $mpr->id }}">
                                                 <input type="hidden" name="serving_size" value="{{ $mpr->serving_size }}">
                                                 <input type="hidden" name="project_id" value="{{ $mpr->project->id }}">
-                                                <input type="hidden" name="run_count" value="{{ $mpr->bprs->max('run_count') }}">
+                                                <input type="hidden" name="run_count" value="{{ $mpr->project->batch_count }}">
 
 
 

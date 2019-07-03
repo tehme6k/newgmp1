@@ -14,8 +14,12 @@ class CreateProductVendorTable extends Migration
     public function up()
     {
         Schema::create('product_vendor', function (Blueprint $table) {
-            $table->bigInteger('product_id');
-            $table->bigInteger('vendor_id');
+            $table->bigInteger('product_id')->references('id')->on('products');
+            $table->bigInteger('vendor_id')->references('id')->on('vendors');
+
+            $table->primary(['product_id', 'vendor_id']);
+
+
         });
     }
 

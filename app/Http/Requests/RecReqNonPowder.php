@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductRequest extends FormRequest
+class RecReqNonPowder extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class CreateProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'category' => 'required',
-            'vendors' => 'required',
-            'par' => 'required'
+            'amount' => 'required',
+            'vendor' => 'required',
+            'lot' => 'required',
+            'notes' => 'required',
+            'expiration_date' => 'required'
         ];
     }
 }
