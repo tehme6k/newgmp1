@@ -30,7 +30,7 @@ class Bpr extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class)->withPivot('amount', 'category_id');
+        return $this->belongsToMany(Product::class)->withPivot('amount', 'category_id', 'status');
     }
 
     public function powders()

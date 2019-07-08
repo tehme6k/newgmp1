@@ -19,6 +19,7 @@ class CreateBprProductTable extends Migration
             $table->integer('product_id');
             $table->double('amount', 9, 2)->unsigned();
             $table->integer('category_id');
+            $table->string('status')->default('open');
         });
     }
 
