@@ -35,74 +35,105 @@
             </div>
         </section>
 
-        @if($inventories->count() > 0)
-        <table class="table">
-            <thead>
-            <th>Input Amount</th>
-{{--            <th>Input Unit</th>--}}
-            <th>Use Amount</th>
-{{--            <th>Use Unit</th>--}}
-            <th>Lot</th>
-            <th>Added By</th>
-            <th>Added On</th>
-            <th>Status</th>
-            <th>Files</th>
-            </thead>
-            <tbody>
-            @foreach($inventories as $inventory)
-                <tr>
-                    <td>
-                        @can('read', $inventory)
-                            <a href="{{ route('inventories.show', $inventory->id) }}" class="btn btn-link">
-                                {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
-                            </a>
-                        @else
-                            {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
-                        @endcan
-                    </td>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Received In
+                        </button>
+                    </h5>
+                </div>
 
-                    <td>
-                        {{number_format($inventory->use_amount, 2)}}
-                        @if($inventory->input_unit === 'ea')
-                            ea
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+
+                        @if($inventories->count() > 0)
+                            <table class="table">
+                                <thead>
+                                <th>Input Amount</th>
+                                {{--            <th>Input Unit</th>--}}
+                                <th>Use Amount</th>
+                                {{--            <th>Use Unit</th>--}}
+                                <th>Lot</th>
+                                <th>Added By</th>
+                                <th>Added On</th>
+                                <th>Status</th>
+                                <th>Files</th>
+                                </thead>
+                                <tbody>
+                                @foreach($inventories as $inventory)
+                                    <tr>
+                                        <td>
+                                            @can('read', $inventory)
+                                                <a href="{{ route('inventories.show', $inventory->id) }}" class="btn btn-link">
+                                                    {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
+                                                </a>
+                                            @else
+                                                {{number_format($inventory->input_amount, 2)}} {{$inventory->input_unit}}
+                                            @endcan
+                                        </td>
+
+                                        <td>
+                                            {{number_format($inventory->use_amount, 2)}}
+                                            @if($inventory->input_unit === 'ea')
+                                                ea
+                                            @else
+                                                KG
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ route('lot.show', $inventory->id) }}">
+                                                {{ $inventory->vendor_lot }}
+                                            </a>
+
+                                        </td>
+
+                                        <td>
+                                            {{ $inventory->createdBy->name }}
+                                        </td>
+
+                                        <td>
+                                            {{ $inventory->created_at}}
+                                        </td>
+
+                                        <td>
+                                            {{$inventory->status}}
+                                        </td>
+
+                                        <td>
+                                            {{$inventory->files->count()}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         @else
-                            KG
+                            No Data
                         @endif
-                    </td>
 
-                    <td>
-                        <a href="{{ route('lot.show', $inventory->id) }}">
-                            {{ $inventory->vendor_lot }}
-                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Batch Issues
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        @if($bprProduct->count() > 0)
+                            test
+                        @endif
+                    </div>
+                </div>
+            </div>
 
-                    </td>
-
-                    <td>
-                        {{ $inventory->createdBy->name }}
-                    </td>
-
-                    <td>
-                        {{ $inventory->created_at}}
-                    </td>
-
-                    <td>
-                        {{$inventory->status}}
-                    </td>
-
-                    <td>
-                        {{$inventory->files->count()}}
-                    </td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-        @else
-            No Data
-        @endif
-
-        @if($bprProduct->count() > 0)
-            test
-        @endif
+        </div>
 
 
 
