@@ -10,6 +10,7 @@ class BprProduct extends Pivot
         'bpr_id',
         'product_id',
         'amount',
-        'category_id'
+        'category_id',
+        'status'
     ];
 }

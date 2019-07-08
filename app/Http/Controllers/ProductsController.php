@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BprProduct;
 use App\User;
 use App\Category;
 use App\Http\Requests\CreateProductRequest;
@@ -55,6 +56,8 @@ class ProductsController extends Controller
 
         $total = Inventory::where('product_id', $product->id)->where('status', 'approved');
 
+        $bprProduct = BprProduct::where('product_id', $product->id)->where('status', 'open');
+
 //        if($product->category->name == 'Powder'){
 //            $unit = 'Kg';
 //        }else{
@@ -64,7 +67,8 @@ class ProductsController extends Controller
         return view('products.show')
             ->with('product', $product)
             ->with('inventories', $inventories)
-            ->with('total', $total);
+            ->with('total', $total)
+            ->with('bprProduct', $bprProduct);
     }
 
     public function edit($id)

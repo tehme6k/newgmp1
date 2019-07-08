@@ -100,6 +100,10 @@
             No Data
         @endif
 
+        @if($bprProduct->count() > 0)
+            test
+        @endif
+
 
 
         @yield('content')
