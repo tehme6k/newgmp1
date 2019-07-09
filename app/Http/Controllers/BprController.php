@@ -50,6 +50,14 @@ class BprController extends Controller
 
         $user = User::findOrFail(auth()->user()->id)->first();
 
+        if($product->total > $amount){
+
+        }else{
+            session()->flash('success', 'Error');
+
+            return back();
+        }
+
         $bpr = $user->bpr()->create([
             'mpr_id' => $request->mpr_id,
             'lot_number' => $lot,
@@ -76,9 +84,10 @@ class BprController extends Controller
 
             $product = Product::findOrFail($mprProduct->product_id)->first();
 
-            $product->update([
-                'total' => $product->total - $amount
-            ]);
+                $product->update([
+                    'total' => $product->total - $amount
+                ]);
+
         }
 
         session()->flash('success', 'Batch created');

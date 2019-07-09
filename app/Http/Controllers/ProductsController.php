@@ -67,8 +67,7 @@ class ProductsController extends Controller
         return view('products.show')
             ->with('product', $product)
             ->with('inventories', $inventories)
-            ->with('total', $total)
-            ->with('bprProduct', $bprProduct);
+            ->with('total', $total);
     }
 
     public function edit($id)
