@@ -31,32 +31,15 @@ class BprController extends Controller
 
     public function store(Request $request)
     {
-
-
-
         $MprProducts = MprProduct::where('mpr_id', $request->mpr_id)->get();
-
         $run_count = $request->run_count + 1;
-
         $pn = $request->project_id;
-
-
         $dt = Carbon::now();
         $dt = substr($dt->toDateString(), 2, 2);
-
         $count = str_pad($run_count, 3, "0", STR_PAD_LEFT);
-
-        $lot = $pn.$dt.$count;
-
+        $lot = $pn . $dt . $count;
         $user = User::findOrFail(auth()->user()->id)->first();
 
-        if($product->total > $amount){
-
-        }else{
-            session()->flash('success', 'Error');
-
-            return back();
-        }
 
         $bpr = $user->bpr()->create([
             'mpr_id' => $request->mpr_id,
@@ -69,14 +52,13 @@ class BprController extends Controller
         $project = Project::findOrFail($request->project_id);
 
 
-
         $project->update([
             'batch_count' => $count
         ]);
 
-        foreach($MprProducts as $mprProduct){
-            if($mprProduct->category_id == 1){
-                $amount = $mprProduct->amount * 0.001 * $request->serving_size * ($request->bottle_count * 1.05) ;
+        foreach ($MprProducts as $mprProduct) {
+            if ($mprProduct->category_id == 1) {
+                $amount = $mprProduct->amount * 0.001 * $request->serving_size * ($request->bottle_count * 1.05);
             } else {
                 $amount = $request->bottle_count * 1.05;
             }
@@ -84,48 +66,15 @@ class BprController extends Controller
 
             $product = Product::findOrFail($mprProduct->product_id)->first();
 
-                $product->update([
-                    'total' => $product->total - $amount
-                ]);
+            $product->update([
+                'total' => $product->total - $amount
+            ]);
 
         }
 
         session()->flash('success', 'Batch created');
 
         return back();
-
-
-
-//        $mprProducts = MprProduct::where('mpr_id', $request->mpr_id)->get();
-//
-//            foreach($mprProducts as $mprProduct){
-//                dd($mprProduct->amount);
-//            }
-
-
-//        $mprs = Mpr::with('products')->toSql();
-//
-//        dd($mprs);
-//
-//
-//        foreach($mprs as $mpr){
-//            dd($mpr->products->pivot->amount);
-//        }
-
-//        $products = MprProduct::where('mpr_id', $request->mpr_id)->get();
-//
-//        $bpr = Bpr::create([
-//            'mpr_id' => $request->mpr_id,
-//            'project_id' => $request->project_id,
-//            'lot_number' => '123401001',
-//            'bottle_count' => 5250,
-//            'created_by' => auth()->user()->id
-//        ]);
-//
-//        foreach($products as $product){
-//            dd($product->pivot);
-//            $bpr->products()->attach($product->id, ['amount' => 500]);
-//        }
     }
 
     public function show(Bpr $bpr)
