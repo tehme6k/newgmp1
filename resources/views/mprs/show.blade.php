@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 <div class="container">
         @include('partials.errors')
         <section class="jumbotron text-center">
@@ -51,40 +53,174 @@
         </section>
 
         @if($mpr->products->count() > 0)
-        <table class="table">
-                <thead>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Quantity</th>
-                <th>UOM</th>
-                </thead>
-                <tbody>
-                @foreach($mpr->products as $product)
-                        <tr>
-                                <td>
-                                        {{$product->name}}
-                                </td>
 
-                                <td>
-                                        {{$product->category->name}}
-                                </td>
+{{--          Powder Table      --}}
+       <button>Add Powder</button>
+       @if($powders->count() > 0)
+                        <table class="table table-responsive table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                </tr>
+                                </thead>
 
-                                <td>
-                                        {{$product->pivot->amount}}
-                                </td>
+                                <tbody>
+                                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-1" aria-expanded="false" aria-controls="group-of-rows-1">
+                                        <td>Click to Open/Close</td>
+                                        <td></td>
+                                        <td></td>
 
-                                <td>
-                                        @if($product->category->name == 'Powder')
-                                                mg
-                                        @else
-                                                each
-                                        @endif
-                                </td>
+                                </tr>
+                                </tbody>
 
-                        </tr>
-                @endforeach
-                </tbody>
-        </table>
+                                <tbody id="group-of-rows-1" class="collapse">
+                                @foreach($powders as $powder)
+                                        <tr>
+                                                <td>{{$powder->product->name}}</td>
+                                                <td>{{$powder->amount}}</td>
+                                                <td>MG</td>
+                                        </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+       @endif
+
+        {{--          Bottle Table      --}}
+        <button>Add Bottle</button>
+        @if($bottles->count() > 0)
+                        <table class="table table-responsive table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-2" aria-expanded="false" aria-controls="group-of-rows-1">
+                                        <td>Click to Open/Close</td>
+                                        <td></td>
+                                        <td></td>
+
+                                </tr>
+                                </tbody>
+
+                                <tbody id="group-of-rows-2" class="collapse">
+                                @foreach($bottles as $bottle)
+                                        <tr>
+                                                <td>{{$bottle->product->name}}</td>
+                                                <td>{{$bottle->amount}}</td>
+                                                <td>Ea</td>
+                                        </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+        @endif
+
+        {{--          Lids Table      --}}
+        <button>Add Lid</button>
+        @if($lids->count() > 0)
+                        <table class="table table-responsive table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-3" aria-expanded="false" aria-controls="group-of-rows-1">
+                                        <td>Click to Open/Close</td>
+                                        <td></td>
+                                        <td></td>
+
+                                </tr>
+                                </tbody>
+
+                                <tbody id="group-of-rows-3" class="collapse">
+                                @foreach($lids as $lid)
+                                        <tr>
+                                                <td>{{$lid->product->name}}</td>
+                                                <td>{{$lid->amount}}</td>
+                                                <td>Ea</td>
+                                        </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+        @endif
+
+        {{--          Scoops Table      --}}
+        <button>Add Scoop</button>
+        @if($scoops->count() > 0)
+                        <table class="table table-responsive table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-4" aria-expanded="false" aria-controls="group-of-rows-1">
+                                        <td>Click to Open/Close</td>
+                                        <td></td>
+                                        <td></td>
+
+                                </tr>
+                                </tbody>
+
+                                <tbody id="group-of-rows-4" class="collapse">
+                                @foreach($scoops as $scoop)
+                                        <tr>
+                                                <td>{{$scoop->product->name}}</td>
+                                                <td>{{$lid->amount}}</td>
+                                                <td>Ea</td>
+                                        </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+        @endif
+
+        {{--          Desiccant Table      --}}
+        <button>Add Desiccant</button>
+        @if($desiccants->count() > 0)
+                        <table class="table table-responsive table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>UOM</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr class="clickable" data-toggle="collapse" data-target="#group-of-rows-5" aria-expanded="false" aria-controls="group-of-rows-1">
+                                        <td>Click to Open/Close</td>
+                                        <td></td>
+                                        <td></td>
+
+                                </tr>
+                                </tbody>
+
+                                <tbody id="group-of-rows-5" class="collapse">
+                                @foreach($desiccants as $desiccant)
+                                        <tr>
+                                                <td>{{$desiccant->product->name}}</td>
+                                                <td>{{$desiccant->amount}}</td>
+                                                <td>Ea</td>
+                                        </tr>
+                                @endforeach
+                                </tbody>
+                        </table>
+        @endif
+
+
+
         @else
                 No Data
         @endif
@@ -227,3 +363,4 @@
                 }
         </script>
 @endsection
+

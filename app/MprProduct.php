@@ -15,4 +15,13 @@ class MprProduct extends Pivot
         'amount',
         'category_id'
     ];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

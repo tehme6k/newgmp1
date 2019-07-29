@@ -55,6 +55,15 @@ class MprController extends Controller
     public function show(Mpr $mpr)
     {
 
+        $powders = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 1)->get();
+        $bottles = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 2)->get();
+        $lids = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 3)->get();
+        $scoops = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 4)->get();
+        $labels = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 5)->get();
+        $desiccants = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 6)->get();
+
+//        dd($bottles);
+
         $bprs = Bpr::where('mpr_id', $mpr->id)
             ->where('status', 'quarantine')
             ->orderBy('id', 'desc')
@@ -64,6 +73,12 @@ class MprController extends Controller
         return view('mprs.show')
             ->with('mpr', $mpr)
             ->with('bprs', $bprs)
+            ->with('powders', $powders)
+            ->with('bottles', $bottles)
+            ->with('lids', $lids)
+            ->with('scoops', $scoops)
+            ->with('labels', $labels)
+            ->with('desiccants', $desiccants)
             ->with('allProducts', Product::all());
     }
 
