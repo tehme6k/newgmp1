@@ -42,4 +42,8 @@ class Bpr extends Model
     {
         return $this->belongsTo(Mpr::class);
     }
+
+    public function steps(){
+        return $this->hasMany(Step::class);
+    }
 }

@@ -10,6 +10,7 @@ use App\Inventory;
 use App\Product;
 use App\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductsController extends Controller
 {
@@ -47,7 +48,7 @@ class ProductsController extends Controller
 
         session()->flash('success', 'Product Added');
 
-        return redirect(route('products.index'));
+        return Redirect::route('products.index');
     }
 
     public function show(Product $product)

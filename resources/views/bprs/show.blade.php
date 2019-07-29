@@ -116,6 +116,7 @@
                     </div>
                     <div class="modal-body">
 
+
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="text" class="form-control" name="email">

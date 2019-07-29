@@ -39,7 +39,7 @@
 
                 <div class="form-group">
                     <label for="par">Par</label>
-                    <input type="number" class="form-control" name="par">
+                    <input type="number" step="any" class="form-control" name="par">
                 </div>
 
 

@@ -18,6 +18,7 @@ use App\Product;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class InventoryController extends Controller
 {
@@ -80,7 +81,7 @@ class InventoryController extends Controller
 
         session()->flash('success', 'Adjustment made to inventory successfully');
 
-        return back();
+        return redirect()->back();
     }
 
     public function recPowder (RecReqPowder $request)
@@ -118,7 +119,7 @@ class InventoryController extends Controller
 
     session()->flash('success', 'Product received to inventory successfully');
 
-    return back();
+    return redirect()->route('inventories.show', ['id' => $inventory->id]);
 }
 
     public function recNonPowder (RecReqNonPowder $request)
@@ -143,7 +144,7 @@ class InventoryController extends Controller
 
         session()->flash('success', 'Product received to inventory successfully');
 
-        return redirect(route('products.index'));
+        return redirect()->route('products.show', ['id' => $inventory->product->id]);
     }
 
 
@@ -226,7 +227,7 @@ class InventoryController extends Controller
 
         session()->flash('success', 'Product received to inventory successfully');
 
-        return back();
+        return redirect()->route('products.show', ['id' => $inventory->product->id]);
     }
 
     public function nonpowderReceive(InventoryNonPowderReceiveRequest $request)
