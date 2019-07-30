@@ -37,6 +37,7 @@ Route::put('bprs/{bpr}/approve', 'BprController@approve')->name('bprs.approve');
 Route::put('bprs/{bpr}/reject', 'BprController@reject')->name('bprs.reject');
 Route::put('mprs/{mpr}/approve', 'MprController@approve')->name('mprs.approve');
 Route::post('mprs/add/', 'MprController@addProduct')->name('mpr.add');
+Route::post('mprs/add2/', 'MprController@addProduct2')->name('mpr.add2');
 Route::put('inventories/{inventory}/approve', 'InventoryController@approve')->name('inventories.approve');
 Route::put('inventories/{inventory}/reject', 'InventoryController@reject')->name('inventories.reject');
 Route::post('/inventories/powder', 'InventoryController@powderstore')->name('inventories.powder.store');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bpr;
 use App\Http\Requests\AddProductToMprRequest;
+use App\Http\Requests\AddProductToMprRequest2;
 use App\Http\Requests\ApproveStatusRequest;
 use App\Http\Requests\NewMprRequest;
 use App\Mpr;
@@ -56,11 +57,16 @@ class MprController extends Controller
     {
 
         $powders = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 1)->get();
+        $powdersAll = Product::where('category_id', 1)->get();
         $bottles = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 2)->get();
+        $bottlesAll = Product::where('category_id', 2)->get();
         $lids = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 3)->get();
+        $lidsAll = Product::where('category_id', 3)->get();
         $scoops = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 4)->get();
+        $scoopsAll = Product::where('category_id', 4)->get();
         $labels = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 5)->get();
         $desiccants = MprProduct::where('mpr_id', $mpr->id)->where('category_id', 6)->get();
+        $desiccantsAll = Product::where('category_id', 6)->get();
 
 //        dd($bottles);
 
@@ -74,11 +80,16 @@ class MprController extends Controller
             ->with('mpr', $mpr)
             ->with('bprs', $bprs)
             ->with('powders', $powders)
+            ->with('powdersAll', $powdersAll)
             ->with('bottles', $bottles)
+            ->with('bottlesAll', $bottlesAll)
             ->with('lids', $lids)
+            ->with('lidsAll', $lidsAll)
             ->with('scoops', $scoops)
+            ->with('scoopsAll', $scoopsAll)
             ->with('labels', $labels)
             ->with('desiccants', $desiccants)
+            ->with('desiccantsAll', $desiccantsAll)
             ->with('allProducts', Product::all());
     }
 
@@ -90,6 +101,22 @@ class MprController extends Controller
             'mpr_id' => $request->mpr_id,
             'product_id' => $request->product_id,
             'amount' => $request->amount,
+            'category_id' => $product->category->id
+        ]);
+
+        session()->flash('success', 'Item added!');
+
+        return back();
+    }
+
+    public function addProduct2(AddProductToMprRequest2 $request)
+    {
+        $product = Product::findOrFail($request->product_id);
+
+        MprProduct::create([
+            'mpr_id' => $request->mpr_id,
+            'product_id' => $request->product_id,
+            'amount' => 1,
             'category_id' => $product->category->id
         ]);
 
