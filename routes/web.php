@@ -20,6 +20,8 @@ Route::get('pages', function (){
     return view('pages');
 });
 
+Route::resource('/steps', 'StepsController');
+Route::resource('/types', 'TypesController');
 Route::resource('/vendors', 'VendorsController');
 Route::resource('/vendorcoas', 'VendorcoasController');
 Route::resource('/bprs', 'BprController');
@@ -29,8 +31,12 @@ Route::resource('/products', 'ProductsController');
 Route::resource('/projects', 'ProjectsController');
 Route::resource('/boxes', 'BoxesController');
 Route::resource('/users', 'UsersController');
+Route::resource('/countries', 'CountriesController');
 Route::resource('inventories', 'InventoryController')->except('create');
 
+//Route::get('/bprs/{bpr}/steps', 'BprController@steps')->name('bpr.steps');
+Route::get('/inventory/underPar', 'InventoryController@underPar')->name('inventories.underPar');
+Route::get('/inventories/{category}/index', 'InventoryController@categoryIndex')->name('inventories.category.index');
 Route::get('/inventories/create/{product}', 'InventoryController@create')->name('inventories.create');
 Route::put('/inventories/newfile/{inventory}', 'InventoryController@newFile')->name('inventories.newFile');
 Route::put('bprs/{bpr}/approve', 'BprController@approve')->name('bprs.approve');
@@ -39,8 +45,8 @@ Route::put('mprs/{mpr}/approve', 'MprController@approve')->name('mprs.approve');
 Route::post('mprs/add/', 'MprController@addProduct')->name('mpr.add');
 Route::put('inventories/{inventory}/approve', 'InventoryController@approve')->name('inventories.approve');
 Route::put('inventories/{inventory}/reject', 'InventoryController@reject')->name('inventories.reject');
-Route::post('/inventories/powder', 'InventoryController@powderstore')->name('inventories.powder.store');
-Route::post('/inventories/nonpowder', 'InventoryController@nonpowderstore')->name('inventories.nonpowder.store');
+Route::post('/inventories/powderStore', 'InventoryController@powderstore')->name('inventories.powder.store');
+Route::post('/inventories/nonpowderStore', 'InventoryController@nonpowderstore')->name('inventories.nonpowder.store');
 Route::post('/inventories/recPowder', 'InventoryController@recPowder')->name('inv.rec.powder');
 Route::post('/inventories/recNonPowder', 'InventoryController@recNonPowder')->name('inv.rec.non.powder');
 

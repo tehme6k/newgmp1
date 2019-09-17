@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Vendor;
 use Carbon\Carbon;
 use App\Http\Requests\AddFileRequest;
 use App\Http\Requests\ApproveStatusRequest;
@@ -17,6 +18,7 @@ use App\Inventory;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
@@ -85,42 +87,42 @@ class InventoryController extends Controller
     }
 
     public function recPowder (RecReqPowder $request)
-{
+    {
 
-    //conversion variables
-    $lbs_kg = 0.45359237;
-    $g_kg = 0.001;
-    $unit = $request->unit;
+        //conversion variables
+        $lbs_kg = 0.45359237;
+        $g_kg = 0.001;
+        $unit = $request->unit;
 
-    $input_amount = $request->amount;
+        $input_amount = $request->amount;
 
-    //perform conversions on amount if grams or pounds was used
-    if($unit === 'lb'){
-        $use_amount = $input_amount * $lbs_kg;
-    }elseif($unit === 'g'){
-        $use_amount = $input_amount * $g_kg;
-    }elseif($unit === 'kg'){
-        $use_amount = $input_amount;
+        //perform conversions on amount if grams or pounds was used
+        if($unit === 'lb'){
+            $use_amount = $input_amount * $lbs_kg;
+        }elseif($unit === 'g'){
+            $use_amount = $input_amount * $g_kg;
+        }elseif($unit === 'kg'){
+            $use_amount = $input_amount;
+        }
+
+        //create inventory adjustment
+        $inventory = Inventory::create([
+            'product_id' => $request->product,
+            'input_unit' => $unit,
+            'input_amount' => $input_amount,
+            'use_amount' => $use_amount,
+            'notes' => $request->notes,
+            'type' => 'receive',
+            'vendor_lot' => $request->lot,
+            'vendor_id' => $request->vendor,
+            'expiration_date' => $request->expiration_date,
+            'created_by' => auth()->user()->id
+        ]);
+
+        session()->flash('success', 'Product received to inventory successfully');
+
+        return redirect()->route('inventories.show', ['id' => $inventory->id]);
     }
-
-    //create inventory adjustment
-    $inventory = Inventory::create([
-        'product_id' => $request->product,
-        'input_unit' => $unit,
-        'input_amount' => $input_amount,
-        'use_amount' => $use_amount,
-        'notes' => $request->notes,
-        'type' => 'receive',
-        'vendor_lot' => $request->lot,
-        'vendor_id' => $request->vendor,
-        'expiration_date' => $request->expiration_date,
-        'created_by' => auth()->user()->id
-    ]);
-
-    session()->flash('success', 'Product received to inventory successfully');
-
-    return redirect()->route('inventories.show', ['id' => $inventory->id]);
-}
 
     public function recNonPowder (RecReqNonPowder $request)
     {
@@ -330,7 +332,7 @@ class InventoryController extends Controller
 
     public function status(Inventory $inventory)
     {
-       return view('inventory.status')->with('inventory', $inventory);
+        return view('inventory.status')->with('inventory', $inventory);
     }
 
     public function approve(Inventory $inventory, ApproveStatusRequest $request)
@@ -395,5 +397,25 @@ class InventoryController extends Controller
 
             return back();
         }
+    }
+
+    public function categoryIndex(Category $category)
+    {
+        $products = Product::where('category_id', $category->id)->get();
+
+
+        return view('inventory.category')
+            ->with('products', $products)
+            ->with('category', $category);
+    }
+
+    public function underPar()
+    {
+        $products = Product::where('total', '<', DB::raw('par'))->get();
+
+        return view('products.index')
+            ->with('categories', Category::all())
+            ->with('products', $products)
+            ->with('vendors', Vendor::all());
     }
 }

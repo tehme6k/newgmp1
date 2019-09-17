@@ -60,18 +60,18 @@
                                 <td>0</td>
 
                                 <td>
-                                    @if($product->inventories->sum('amount') > 0)
+                                    @if($product->inventories->sum('use_amount') > 0)
                                         @if($product->category->name === 'Powder')
-                                            {{$product->inventories->sum('amount')}} Kg
+                                            {{$product->inventories->sum('use_amount')}} Kg
                                         @else
-                                            {{$product->inventories->sum('amount')}} each
+                                            {{$product->inventories->sum('use_amount')}} each
                                         @endif
                                     @else
                                         <font color="red">
                                             @if($product->category->name === 'Powder')
-                                                {{$product->inventories->sum('amount')}} Kg
+                                                {{$product->inventories->sum('use_amount')}} Kg
                                             @else
-                                                {{$product->inventories->sum('amount')}} each
+                                                {{$product->inventories->sum('use_amount')}} each
                                             @endif
                                         </font>
                                     @endif

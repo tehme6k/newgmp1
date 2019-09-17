@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStepsTable extends Migration
+class SetNameAndFlavorInProjectsTableToUnique extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateStepsTable extends Migration
      */
     public function up()
     {
-        Schema::create('steps', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('type_id');
-            $table->bigInteger('step_number');
-            $table->text('details');
-
+        Schema::table('projects', function (Blueprint $table) {
+            $table->unique('flavor', 'name');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateStepsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('steps');
+        Schema::table('projects', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -37,9 +37,10 @@
                     </div>
                 </div>
                 <p>
-                @if($bpr->status === 'approved')
+                @if($bpr->status == 'issued')
                     <h3>
-                        Issued by <strong>{{ $bpr->createdBy->name }}</strong> {{$bpr->updated_at->diffForHumans()}}
+                        Issued by <strong>{{ $bpr->createdBy->name }}</strong> {{$bpr->updated_at->diffForHumans()}}<br>
+                        <a href="{{route('bpr.steps', $bpr->id)}}" class="btn btn-primary my-2 mr-2" >Manufacturing Instructions</a>
                     </h3>
                 @elseif($bpr->status === 'rejected')
                     <h3>
@@ -51,7 +52,7 @@
                 @else
                     <button type="button" class="btn btn-primary my-2 mr-2" onclick="handleApprove()">Issue Batch</button>
                     <button type="button" class="btn btn-warning my-2" onclick="handleReject()">Reject Batch</button>
-                    @endif
+                @endif
                 </p>
             </div>
         </section>

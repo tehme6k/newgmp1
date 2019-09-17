@@ -14,16 +14,43 @@ $vendor = App\Vendor::first();
     <a class="nav-link" href="/home">Home</a>
 </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('vendors.index') }}">Vendors</a>
+
+
+
+
+<li class="nav-item dropdown">
+    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+        Products <span class="caret"></span>
+    </a>
+
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{ route('products.index') }}">
+            All Products
+        </a>
+        <hr>
+        <a class="dropdown-item" href="{{ route('vendors.index') }}">
+            Product vendors
+        </a>
+        <a class="dropdown-item" href="{{ route('categories.index') }}">
+            Product categories
+        </a>
+    </div>
 </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('products.index') }}">Products</a>
-</li>
+<li class="nav-item dropdown">
+    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+        Projects <span class="caret"></span>
+    </a>
 
-<li class="nav-item">
-    <a class="nav-link" href="{{ route('projects.index') }}">Projects</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="{{ route('types.index') }}">
+            Project Types
+        </a>
+        <hr>
+        <a class="dropdown-item" href="{{ route('projects.index') }}">
+            All Projects
+        </a>
+    </div>
 </li>
 
 <li class="nav-item dropdown">
@@ -34,6 +61,10 @@ $vendor = App\Vendor::first();
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="{{ route('inventories.index') }}">
             All Inventory
+        </a>
+
+        <a class="dropdown-item" href="{{route('inventories.underPar')}}">
+            Inventory under par
         </a>
 
     </div>
@@ -54,6 +85,11 @@ $vendor = App\Vendor::first();
         </a>
     </div>
 </li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('countries.index') }}">Countries</a>
+</li>
+
 
 @else
 

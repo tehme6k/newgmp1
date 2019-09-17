@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Country;
 use App\Vendor;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class VendorsController extends Controller
@@ -24,16 +25,24 @@ class VendorsController extends Controller
 
     public function store(Request $request)
     {
-        Vendor::create([
-            'name' => $request->name,
-            'country_id' => $request->country_id,
-            'user_id' => auth()->user()->id
-        ]);
+        try{
+            Vendor::create([
+                'name' => $request->name,
+                'country_id' => $request->country_id,
+                'user_id' => auth()->user()->id
+            ]);
+            session()->flash('success', 'Vendor Added');
+            return redirect(route('vendors.index'));
+        }
+        catch (QueryException $e){
+            $error_code = $e->errorInfo[1];
+            if($error_code == 1062){
+                session()->flash('success', 'Type Already Exists');
 
+                return view('errors.duplicate');
+            }
+        }
 
-        session()->flash('success', 'Vendor Added');
-
-        return redirect(route('vendors.index'));
     }
 
     public function show(Vendor $vendor)

@@ -2,30 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\User;
-use App\Http\Requests\CreateCategoryRequest;
-use Illuminate\Database\QueryException;
+use App\Type;
+use App\Http\Requests\CreateTypeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Database\QueryException;
 
-class CategoriesController extends Controller
+class TypesController extends Controller
 {
 
     public function index()
     {
-        return view('categories.index')->with('categories', Category::all());
+        $types = Type::all();
+
+        return view('types.index')->with('types', $types);
     }
 
-    public function store(CreateCategoryRequest $request)
+    public function create()
+    {
+        return view('types.create');
+    }
+
+    public function store(CreateTypeRequest $request)
     {
         try{
-
-            Category::create([
-                'name' => $request->name,
+            Type::create([
+                'name' => $request->name
             ]);
-            session()->flash('success', 'Category Added');
-            return Redirect::route('categories.index');
+
+            session()->flash('success', 'Type Added');
+
+            return Redirect::route('types.index');
         }
         catch (QueryException $e){
             $error_code = $e->errorInfo[1];
@@ -35,6 +42,8 @@ class CategoriesController extends Controller
                 return view('errors.duplicate');
             }
         }
+
+
     }
 
     public function show($id)
@@ -42,9 +51,9 @@ class CategoriesController extends Controller
         //
     }
 
-    public function edit(Category $category)
+    public function edit($id)
     {
-        return view('categories.create')->with('category', $category);
+        //
     }
 
     public function update(Request $request, $id)

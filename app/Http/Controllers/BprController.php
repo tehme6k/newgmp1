@@ -215,25 +215,25 @@ class BprController extends Controller
                     'created_by' => $user_id
                 ]);
 
-                $i = 1;
-                foreach($BprProducts as $bprProduct){
-                    $product = Product::findOrFail($bprProduct->product_id);
-
-                    $amount = $bprProduct->amount;
-                    if($bprProduct->category_id == 1){
-                        $bpr->steps()->create([
-                            'step_number' => $i,
-                            'details' => 'Use ' .$amount.' grams of '.$product->name
-                        ]);
-                    }else{
-                        $bpr->steps()->create([
-                            'step_number' => $i,
-                            'details' => 'Use ' .$amount.' ea of '.$product->name
-                        ]);
-                    }
-                    $i++;
-
-                }
+//                $i = 1;
+//                foreach($BprProducts as $bprProduct){
+//                    $product = Product::findOrFail($bprProduct->product_id);
+//
+//                    $amount = $bprProduct->amount;
+//                    if($bprProduct->category_id == 1){
+//                        $bpr->steps()->create([
+//                            'step_number' => $i,
+//                            'details' => 'Use ' .$amount.' grams of '.$product->name
+//                        ]);
+//                    }else{
+//                        $bpr->steps()->create([
+//                            'step_number' => $i,
+//                            'details' => 'Use ' .$amount.' ea of '.$product->name
+//                        ]);
+//                    }
+//                    $i++;
+//
+//                }
 
 
                 return view('bprs.issued');
@@ -273,6 +273,10 @@ class BprController extends Controller
         }
     }
 
+    public function steps(Bpr $bpr)
+    {
+        return view('bprs.steps')->with('bpr', $bpr);
+    }
 
     public function edit($id)
     {

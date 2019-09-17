@@ -3,8 +3,6 @@
 @section('content')
     <div class="container">
         @include('partials.errors')
-
-        @can('add category')
             <div class="card card-default mb-2">
                 <div class="card-header">
 
@@ -14,8 +12,6 @@
 
                 </div>
             </div>
-        @endcan
-
 
         <div class="card card-default">
 
@@ -43,7 +39,7 @@
                         @foreach($categories as $category)
                             <tr>
                                 <td>
-                                    <a href="#">{{$category->name}}</a>
+                                    <a href="{{route('inventories.category.index', $category->id)}}">{{$category->name}}</a>
                                 </td>
 
                                 <td>
